@@ -1,11 +1,23 @@
 {
-  "name": "authentication",
+  "name": "auth-backend",
   "version": "1.0.0",
-  "description": "This service is responsible for authentcation and login",
+  "description": "This is the backend service for the HR-OnBoarding app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
-  "author": "",
-  "license": "ISC"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amramadan/HR-Auth.git"
+  },
+  "author": "VSSE - DTT",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amramadan/HR-Auth/issues"
+  },
+  "homepage": "https://github.com/amramadan/HR-Auth#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
