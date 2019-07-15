@@ -1,0 +1,196 @@
+openapi: "3.0.2"
+info:
+  title: "VF HR Login System"
+  description: "This is API for the HR Login system"
+  version: "0.0.1"
+  contact: 
+      name: "VSSE - Digital Tooling Team"
+      email: "TBD@example.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+
+servers: 
+  - url: http://localhost:3000
+    description: Localhost to be used after setting up repo locally
+    
+components:
+  parameters:
+    username:
+      name: username
+      in: path
+      description: a username that may be or may not be in the database
+      required: true
+      schema:
+        type: string
+        
+  schemas:
+    user_credantials:
+      type: object
+      required: 
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+          minLength: 8
+    record_info:
+      properties:
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        is_deleted:
+          type: boolean  
+    user:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        date_of_birth:
+          type: string
+          format: date-time
+        credentials:
+          $ref: '#/components/schemas/user_credantials'
+        extra_info:
+          type: object
+        record_info:
+          $ref: '#/components/schemas/record_info'
+      
+  responses:
+    success:
+      description: Successful request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+    Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object 
+            properties:
+              message:
+                type: object
+                
+  requestBodies:
+    login:
+      description: Login credentials
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/user_credantials'
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+          
+security:
+  - bearer_auth: []
+  
+paths:
+  /user:
+    post:
+      summary: "Create user"
+      description: "This path is mainly used to send user data to be created"
+      operationId: userCreation
+      tags: 
+        - user
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: 
+              $ref: '#/components/schemas/user'
+      security: []
+      responses:
+        200:
+          $ref: '#/components/responses/success'
+        400:
+          $ref: '#/components/responses/Error'
+  /user/{username}:
+    get:
+      summary: "Get user by username"
+      description: "This path is to find a user by username"
+      operationId: userFindByUsername
+      tags: 
+        - user
+      parameters:
+        - $ref: '#/components/parameters/username'
+      responses:
+        200:
+          $ref: '#/components/responses/success'
+        400:
+          $ref: '#/components/responses/Error'
+    put:
+      summary: "update a user"
+      description: "This path is to update a certain user"
+      operationId: userUpdateByUsername
+      tags: 
+        - user
+      parameters:
+        - $ref: '#/components/parameters/username'
+      responses:
+        200:
+          $ref: '#/components/responses/success'
+        400:
+          $ref: '#/components/responses/Error'
+    delete:
+      summary: "delete a user"
+      description: "This path is to delete a certain user"
+      operationId: userDeleteByUsername
+      tags: 
+        - user
+      parameters:
+        - $ref: '#/components/parameters/username'
+      responses:
+        200:
+          $ref: '#/components/responses/success'
+        400:
+          $ref: '#/components/responses/Error'
+  /user/login:
+    post:
+      summary: "User login"
+      description: "This path is mainly used to send and authenticate the user creditentials"
+      operationId: userLogin
+      tags: 
+        - user
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: 
+              $ref: '#/components/schemas/user_credantials'
+      security: []
+      responses:
+        200:
+          $ref: '#/components/responses/success'
+        400:
+          $ref: '#/components/responses/Error'  
+          
+  /user/logout:
+    get:
+      summary: "Logout path"
+      description: "redirect user to home and deauthenticate tokens"
+      operationId: userLogout
+      tags: 
+        - user
+      security: []
+      responses:
+        200:
+          $ref: '#/components/responses/success'
+          
+  
