@@ -1,45 +1,45 @@
 const bcrypt = require("bcrypt");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const { Schema } = mongoose;
 const hashCost = 7;
 
-const userSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        set: v => String(v).toLowerCase(),
-        validate: {
-        validator: function(v) {
-            const emailPattern = /^[a-z0-9.-_]+@[a-z]+\.[a-z]{3}$/;
-            return emailPattern.test(v);
-        },
-        message: "{VALUE} is not a valid email!"
-    }
-  },
+const UserSchema = new Schema(
+  {
+    //   name: {
+    //       type: String,
+    //       required: true
+    //   },
+    //   email: {
+    //       type: String,
+    //       required: true,
+    //       unique: true,
+    //       set: v => String(v).toLowerCase(),
+    //       validate: {
+    //       validator: function(v) {
+    //           const emailPattern = /^[a-z0-9.-_]+@[a-z]+\.[a-z]{3}$/;
+    //           return emailPattern.test(v);
+    //       },
+    //       message: "{VALUE} is not a valid email!"
+    //   }
+    // },
     username: {
-        type: String,
-        index: true,
-        unique: true,
-        dropDups: true,
-        required: true,
+      type: String,
+      unique: true,
+      required: true
     },
     password: {
-        type: String,
-        required: true,
-    },
-    {
-   timestamps: {
-     createdAt: 'created_at',
-     updatedAt: 'updated_at'
-   }
-
-});
+      type: String,
+      required: true
+    }
+  },
+  {
+    timestamps: {
+      createdAt: "created_at",
+      updatedAt: "updated_at"
+    }
+  }
+);
 
 UserSchema.pre("save", function(next) {
   const currentDate = new Date();
@@ -71,7 +71,6 @@ UserSchema.pre("save", function(next) {
   }
 });
 
-
 // Hide password field when printing out data.
 UserSchema.set("toJSON", {
   transform: function(doc, ret, opt) {
@@ -87,7 +86,5 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
   });
 };
 
-
-
-const User = mongoose.model('User', userSchema);
-module.exports = {User, hashCost};
+const User = mongoose.model("User", UserSchema);
+module.exports = { User, hashCost };
