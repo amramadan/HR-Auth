@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "set NODE_ENV=development&& nodemon server.js"
+    "start": "set JWT_EXPIRATION_MS=3600000&& set NODE_ENV=development&& nodemon server.js"
   },
   "repository": {
     "type": "git",
